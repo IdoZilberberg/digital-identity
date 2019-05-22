@@ -30,46 +30,46 @@ func verifyingKey(curve CurveSystem) (vk verifyingKeyStruct) {
 	var coord2 big.Int
 	var coord3 big.Int
 
-	coord0.SetString("0x000b33d9ad29a9b0d5efbf7dfae50b99cf281d743a2c1a2ab11f98f7db397d46",0)
-	coord1.SetString("0x0a0882ed31e0e1a693aef33b8e340474c02fd4b0c181d22edf10d1f424affa73",0)
+	coord0.SetString("0x2c3ff1734dd6a797306e8f632629524654933cc0be38e75c351be3258ad750ac",0)
+	coord1.SetString("0x037811675568fe595a0ab517aebc83a7838f51f0cc8ceb25f872152a44512a73",0)
 	bigintCoordsA := []*big.Int{&coord0, &coord1}
 	a, _ := curve.MakeG1Point(bigintCoordsA, true)
 
-	coord0.SetString("0x1dfffdda89034ae429c2728d7a0e84bc5c626341a0784b2e8096e3bdc17991eb",0)
-	coord1.SetString("0x087b88affb2f79ffcb1ecce68437d0f87b2e7eec946ddab28fd6dd1ec44d0da7",0)
-	coord2.SetString("0x0ffcb5e0eb532684ca67dc96ff637790e1aaf1a8c11f66f25cdcb1c24dcddde6",0)
-	coord3.SetString("0x08ffa2a55ee7ce13b267e252a6819d15203547c82cf5176d59b5f9556a5850d4",0)
+	coord0.SetString("0x2b2ff65c75a083af10fda544309746e64a7e4cd9c97c699fde7db47748946491",0)
+	coord1.SetString("0x257b2546c12ce0a78e4fabd4ed716bb3906676bc10e111e1918a5de3f3bb2f8c",0)
+	coord2.SetString("0x146fe83c45d22eeffca5dc764fbde29c40bcb25b2a39f772289223628fe86b25",0)
+	coord3.SetString("0x0f9db279b1d71dd7ee90303955b27d864a0b902dd2acd9d8d339bc3572ca5856",0)
 	bigintCoordsB := []*big.Int{&coord0, &coord1, &coord2, &coord3}
 	b, _ := curve.MakeG2Point(bigintCoordsB, true)
 
-	coord0.SetString("0x16df303edb03dc216eeebef9fb9b37d9aff584cc042183997597617580010c74",0)
-	coord1.SetString("0x024b87109d56f6b2b6b89b285a0a069aa956f136a655c7b64d2477255ca7bf81",0)
-	coord2.SetString("0x101f90e15abb7695f9a1cfe1bd74c9c7ebcaa8831714320e4d09d2e59b9b7939",0)
-	coord3.SetString("0x00675d9ff132524cf4958cf53fa034ec25601c09a7408c878b468893d4822643",0)
+	coord0.SetString("0x30099ac4e0112344028b6f4b1cf9e5ec861539f9ea5bc1082e93a1ea924b574f",0)
+	coord1.SetString("0x04d84160f38b193c5209fb299c8bec52e14ddd428897664a0c31e38a26a19f70",0)
+	coord2.SetString("0x1855b8a6b6bb298ffe6c00c49efff5253673240ff769720862a486ec6f3943ae",0)
+	coord3.SetString("0x0d50421e6d3b89aaad573f4a49673fc8153ead998697099ed1ab2cd8f2591503",0)
 	bigintCoordsGamma := []*big.Int{&coord0, &coord1, &coord2, &coord3}
 	gamma, _ := curve.MakeG2Point(bigintCoordsGamma, true)
 
-	coord0.SetString("0x0a07b61fc43a17e22edefb2a29702151f2766b1c0d95101997c6df86f1a405e7",0)
-	coord1.SetString("0x192f088fb81ff76b3650ecef61732c74b904a14a502ef2c9a44adbddad9d7e08",0)
-	coord2.SetString("0x2f22f5764cb39a5ae5662bbe96bda2b7c7707fd2c30bd1cc541846067c765a4a",0)
-	coord3.SetString("0x08fc7f140b437b1e47243c81effa26ac5ddc7be705e4033226a94d1477372a36",0)
+	coord0.SetString("0x00f5ec11688882f16f114c7ba452e89a5905b44bc9a3363e1c809a43e55e3397",0)
+	coord1.SetString("0x067ef11cff3c02bc954cab4a1fcda35da26bbb86292e6de32bc79a9edfdd9d5e",0)
+	coord2.SetString("0x1d144848691b7a4430818c03bb4a0676384f5ceafa255ea7eef0c0a68776be78",0)
+	coord3.SetString("0x1467672b53de9765c3f48242e87b309c7b680b56fd95e3400e1f2bb9b08dfadd",0)
 	bigintCoordsDelta := []*big.Int{&coord0, &coord1, &coord2, &coord3}
 	delta, _ := curve.MakeG2Point(bigintCoordsDelta, true)
 
 	var abc [3]Point
 
-	coord0.SetString("0x108deb3b8220f45a52338177bba2a458bde8c6580a8823a2d7e04185e54a66c4",0)
-	coord1.SetString("0x2f32ed947cc6f83e8741852634e4822e431c52eea2a3a54a0ccab5a8c918deb0",0)
+	coord0.SetString("0x11cdddfacc6b0bf0bd8011af559888b1295f78378ba64ad7a71a5d34ca36bf4f",0)
+	coord1.SetString("0x19a21b4107f7491e41ca840174274dd13d4b9bbde1b3b560405a870d67a64679",0)
 	bigintCoordsABC1 := []*big.Int{&coord0, &coord1}
 	abc[0], _ = curve.MakeG1Point(bigintCoordsABC1, true)
 
-	coord0.SetString("0x0064197f6d66619300e9cf6ef7c3a03c44cc5f0955c2221053b3b65f09fe4622",0)
-	coord1.SetString("0x23a00dce927a8af357bc98ac344f662468808e8958fe371ef3d204ca01a7b8a1",0)
+	coord0.SetString("0x1f95e54407e92855ed97557c21367e4ac6c2e5334536a399f6bb83f7a1e44074",0)
+	coord1.SetString("0x171632f37bea7940bba99594f255d6234ef99606cf9743801fc739b311255ef8",0)
 	bigintCoordsABC2 := []*big.Int{&coord0, &coord1}
 	abc[1], _ = curve.MakeG1Point(bigintCoordsABC2, true)
 
-	coord0.SetString("0x26dd2c0208373e940c6342e9b9d9d04dde91f1e5de045fbe969864b4acc32640",0)
-	coord1.SetString("0x071cf50e51ff5e468bf4aaf1d2d5ab10ac37862c9196c765ebb998bea7ba1505",0)
+	coord0.SetString("0x1d4437e82292f836f99e62a8fe9d2afdda1c4d52263f9642be9ae20e9c8334f9",0)
+	coord1.SetString("0x2d5a34c13d764d173997f7f056737e83438d26b10924777db03ba70d631c49fd",0)
 	bigintCoordsABC3 := []*big.Int{&coord0, &coord1}
 	abc[2], _ = curve.MakeG1Point(bigintCoordsABC3, true)
 
@@ -90,9 +90,12 @@ func verify(curve CurveSystem, input [2]big.Int, proof proof) (result bool) {
 	bigintCoordsZero := []*big.Int{big.NewInt(0), big.NewInt(0)}
 	vkX, _ := curve.MakeG1Point(bigintCoordsZero, true)
 	for i := 0; i < len(input); i++ {
-		vkX.Add(vk.gammaABC[i + 1].Mul(&input[i]))
+		tmp := vk.gammaABC[i + 1].Mul(&input[i])
+		tmp2, _ := vkX.Add(tmp)
+		vkX = tmp2
 	}
-	vkX.Add(vk.gammaABC[0])
+	tmp3, _ := vkX.Add(vk.gammaABC[0])
+	vkX = tmp3
 	var g1Points [4]Point
 	g1Points[0] = proof.a
 	g1Points[1] = negate(curve, vkX)
@@ -103,7 +106,9 @@ func verify(curve CurveSystem, input [2]big.Int, proof proof) (result bool) {
 	g2Points[1] = vk.gamma
 	g2Points[2] = vk.delta
 	g2Points[3] = vk.b
-	_, result = curve.PairingProduct(g1Points[:], g2Points[:])
+	gT, _ := curve.PairingProduct(g1Points[:], g2Points[:])
+	identity := curve.GetGTIdentity()
+	result = gT.Equals(identity)
 	return
 }
 
