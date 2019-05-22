@@ -62,7 +62,7 @@ func MarshalKeys(keys map[string]string) ([]byte, error) {
 	return json.MarshalIndent(keys, "", "  ")
 }
 
-func WriteProofJson(proof *ZKProof) error {
+func WriteProofJson(proof *ZKProof, path string) error {
 	proofMap := make(map[string]string)
 	proofMap["A0"] = proof.A0
 	proofMap["A1"] = proof.A1
@@ -82,16 +82,16 @@ func WriteProofJson(proof *ZKProof) error {
 	proofMap["H1"] = proof.H1
 	proofMap["K0"] = proof.K0
 	proofMap["K1"] = proof.K1
-	proofMap["IdentityHash"] = proof.IdentityHash
-	proofMap["SignedIdentityHash"] = proof.SignedIdentityHash
-	proofMap["IdentityWithNonceHash"] = proof.IdentityWithNonceHash
+	proofMap["identity_hash"] = proof.IdentityHash
+	proofMap["signed_identity_hash"] = proof.SignedIdentityHash
+	proofMap["identity_with_nonce_hash"] = proof.IdentityWithNonceHash
 
 	bytes, err := MarshalKeys(proofMap)
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile("../proof.json", bytes, 0644)
+	err = ioutil.WriteFile(path, bytes, 0644)
 	if err != nil {
 		return err
 	}

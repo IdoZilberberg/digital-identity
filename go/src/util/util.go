@@ -14,9 +14,9 @@ import (
 )
 
 type Issuer struct {
-	Name       string `json:"issuer_name"`
-	PublicKey  string `json:"public_key"`
-	PrivateKey string `json:"private_key"`
+	Name      string `json:"issuer_name"`
+	PublicKey string `json:"public_key"`
+	SecretKey string `json:"secret_key"`
 }
 
 func ReadIssuerFromFile(path string) (*Issuer, error) {
@@ -34,18 +34,19 @@ func WaitForEnter(output string) {
 	buf.ReadBytes('\n')
 }
 
-func Log(a ...interface{}) {
-	fmt.Println(a)
+func Log(format string, a ...interface{}) {
+	fmt.Printf(format+"\n", a...)
 }
 
-func B2S(input []byte) string {
+func B2HexS(input []byte) string {
 	return hex.EncodeToString(input)
 }
 
-func S2B(input string) ([]byte, error) {
+func HexS2B(input string) ([]byte, error) {
 	bytes, err := hex.DecodeString(input)
 	if err != nil {
-		return nil, errors.Wrapf(err, "S2B cannot convert string %s to bytes: %s")
+		return nil, errors.Wrapf(err, "HexS2B cannot convert hex string %s to bytes: %s",
+			input, err)
 	}
 	return bytes, nil
 }

@@ -4,9 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/digital-identity/go/src/util"
-	"github.com/pkg/errors"
 	"os"
 )
+
+const PROOF_PATH = "../proof.json"
+const IDENTITY_PATH = "identity.json"
+const ISSUER_PATH = "../issuer.json"
+const PROVING_KEY_PATH = "proving.key.txt"
 
 func main() {
 	util.Log("WALLET START")
@@ -18,41 +22,44 @@ func main() {
 	}
 	nonce := args[0]
 
-	identity, err := readIdentityFromFile("../data/identity.json")
+	identity, err := readIdentityFromFile(IDENTITY_PATH)
 	util.ExitIfError("Error reading identity", err)
+	util.Log("Read identity")
 
-	issuer, err := util.ReadIssuerFromFile("../issuer.json")
+	issuer, err := util.ReadIssuerFromFile(ISSUER_PATH)
 	util.ExitIfError("Error reading issuer", err)
+	util.Log("Read issuer")
 
-	identityHashBytes, err := util.S2B(identity.String())
 	util.ExitIfError("Cannot convert identity to bytes", err)
-	identityHash := util.SHA256(identityHashBytes)
-	pkBytes, err := util.S2B(issuer.PrivateKey)
-	util.ExitIfError("Cannot convert private key to bytes", err)
-	signedIdentityHash, err := util.Sign(pkBytes, identityHash)
-	util.Log("Signed identity: %s", signedIdentityHash)
+	identityHash := util.SHA256([]byte(identity.String()))
+	skBytes, err := util.HexS2B(issuer.SecretKey)
+	util.ExitIfError("Cannot convert secret key to bytes", err)
+	util.Log("Signing with issuerSK: %s", issuer.SecretKey)
+	signedIdentityHash, err := util.Sign(skBytes, identityHash)
+	util.Log("Signed identity hash: %s, identityHash: %s", signedIdentityHash, util.B2HexS(identityHash))
 	util.ExitIfError("Error signing", err)
 	identityWithNonce := fmt.Sprintf("%s%s", identity.String(), nonce)
 
-	identityWithNonceBytes, err := util.S2B(identityWithNonce)
-	util.ExitIfError("Cannot convert identity with nonce to bytes", err)
+	identityWithNonceBytes := []byte(identityWithNonce)
 	identityWithNonceHash := util.SHA256(identityWithNonceBytes)
+	util.Log("Reading proving key from %s", PROVING_KEY_PATH)
+	provingKey := readProvingKeyFromFile(PROVING_KEY_PATH)
+	//util.ExitIfError("Error reading proving keys", err)
 
-	provingKey, err := readProvingKeyFromFile("../data/proving.keys")
-	util.ExitIfError("Error reading proving keys", err)
-
+	util.Log("Creating Proof...")
 	proof, err := CreateProof(
-		util.B2S(*provingKey),
+		provingKey,
 		identity.Secret,
 		identity.String(),
-		util.B2S(identityHash),
+		util.B2HexS(identityHash),
 		util.TodayYYYYMMDD(),
 		nonce,
-		util.B2S(identityWithNonceHash),
-		util.B2S(signedIdentityHash),
+		util.B2HexS(identityWithNonceHash),
+		util.B2HexS(signedIdentityHash),
 	)
 	util.ExitIfError("Failed to create proof", err)
-	util.WriteProofJson(proof)
+
+	util.WriteProofJson(proof, PROOF_PATH)
 	util.Log("Proof: %s", proof)
 	util.Log("Wrote proof to file, continue with Authorizer flow")
 
@@ -78,27 +85,47 @@ func readIdentityFromFile(path string) (*Identity, error) {
 	return &value, nil
 }
 
-func readProvingKeyFromFile(path string) (*[]byte, error) {
+func readProvingKeyFromFile(path string) []byte {
 	input := util.ReadFileOrPanic(path)
-	var value []byte
-	if err := json.Unmarshal(input, &value); err != nil {
-		return nil, err
-	}
-	return &value, nil
+	return input
 }
 
 func CreateProof(
-	provingKey string,
+	provingKey []byte,
 	clientSecret string,
 	identityString string, // A: ClientSecret+1980
 	identityHash string, // B: 09873425098142708914725 // string
 	today string, // 2019
 	nonce string,
-	hashedIdentityWithNonce string, // string
+	identityWithNonceHash string, // string
 	signedIdentityHash string, // string
 ) (*util.ZKProof, error) {
 
 	// TODO Impl me
 
-	return nil, errors.New("not implemented")
+	return &util.ZKProof{
+		A0:                    "",
+		A1:                    "",
+		A_p0:                  "",
+		A_p1:                  "",
+		B00:                   "",
+		B01:                   "",
+		B10:                   "",
+		B11:                   "",
+		B_p0:                  "",
+		B_p1:                  "",
+		C0:                    "",
+		C1:                    "",
+		C_p0:                  "",
+		C_p1:                  "",
+		H0:                    "",
+		H1:                    "",
+		K0:                    "",
+		K1:                    "",
+		IdentityHash:          identityHash,
+		SignedIdentityHash:    signedIdentityHash,
+		IdentityWithNonceHash: identityWithNonceHash,
+	}, nil
+
+	//return nil, errors.New("not implemented")
 }
