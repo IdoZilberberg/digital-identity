@@ -87,7 +87,6 @@ func readProvingKeyFromFile(path string) (*[]byte, error) {
 	return &value, nil
 }
 
-// TODO Add ClientSecret string
 func CreateProof(
 	provingKey string,
 	clientSecret string,
@@ -99,7 +98,7 @@ func CreateProof(
 	signedIdentityHash string, // string
 ) (*util.ZKProof, error) {
 
-	// TODO
+	// TODO Impl me
 
 	return nil, errors.New("not implemented")
 }

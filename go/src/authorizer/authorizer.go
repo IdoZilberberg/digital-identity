@@ -58,7 +58,7 @@ func verifyProof(nonce []byte, issuerPK []byte, proof *util.ZKProof) (bool, erro
 
 }
 
-// TODO Over Orbs?
+// TODO Impl over Orbs
 func verifyZKProof(verificationKey []byte, proof *util.ZKProof) (bool, error) {
 
 	// SendTransaction...
