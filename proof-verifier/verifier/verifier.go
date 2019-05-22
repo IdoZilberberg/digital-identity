@@ -5,7 +5,6 @@ package verifier
 
 import (
 	"math/big"
-
 	. "github.com/orbs-network/bgls/curves" // nolint: golint
 )
 
@@ -78,9 +77,8 @@ func verifyingKey(curve CurveSystem) (vk verifyingKeyStruct) {
 }
 
 func negate(curve CurveSystem, g1point Point) (result Point) {
-	var altbnG1Q, _ = new(big.Int).SetString("21888242871839275222246405745257275088696311157297823662689037894645226208583", 10)
 	coords := g1point.ToAffineCoords()
-	coords[1].Sub(altbnG1Q, coords[1])
+	coords[1].Sub(curve.GetG1Q(), coords[1])
 	result, _ = curve.MakeG1Point(coords, false)
 	return
 }
