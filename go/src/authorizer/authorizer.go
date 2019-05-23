@@ -9,6 +9,9 @@ const ISSUER_PATH = "../issuer.json"
 const PROOF_PATH = "../proof.json"
 const VERIFICATION_KEY_PATH = "verification.key.txt"
 
+const AUTHORIZER_PUBLIC_KEY = "92d469d7c004cc0b24a192d9457836bf38effa27536627ef60718b00b0f33152"
+const AUTHORIZER_SECRET_KEY = "3b24b5f9e6b1371c3b5de2e402a96930eeafe52111bb4a1b003e5ecad3fab53892d469d7c004cc0b24a192d9457836bf38effa27536627ef60718b00b0f33152"
+
 func main() {
 	util.Log("AUTHORIZER START")
 
@@ -65,8 +68,7 @@ func verifyProof(nonce []byte, issuerPK []byte, proof *util.ZKProof) (bool, erro
 // TODO Impl over Orbs
 func verifyZKProof(verificationKey []byte, proof *util.ZKProof) (bool, error) {
 
-	// SendTransaction...
-	// See https://github.com/orbs-network/contract-library-experiment/tree/master/contract
+	verifyZKProofWithGammaCli()
 
 	//return true, nil
 	return false, errors.New("not implemented")

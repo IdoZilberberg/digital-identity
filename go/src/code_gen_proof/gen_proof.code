@@ -1,0 +1,16 @@
+import "hashes/sha256/512bitPacked.code" as sha256packed
+def main(private field secret, private field name, private field birthYear, field currentYear, field hashedID0, field hashedID1, field nonce, field response0, field response1) -> (field):
+
+    h = sha256packed([secret, name, birthYear, 0])
+    h[0] == hashedID0
+    h[1] == hashedID1
+
+    g = sha256packed([secret, name, birthYear, nonce])
+    g[0] == response0
+    g[1] == response1
+
+    //verify over 18
+    field age = currentYear - birthYear
+    1 == if age > 17  then 1 else 0 fi
+    
+    return 1

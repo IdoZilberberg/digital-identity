@@ -30,18 +30,22 @@ func main() {
 	util.ExitIfError("Error reading issuer", err)
 	util.Log("Read issuer")
 
-	util.ExitIfError("Cannot convert identity to bytes", err)
-	identityHash := util.SHA256([]byte(identity.String()))
+	identityHash, err := util.CalculateHash([]byte(identity.String()))
+	util.ExitIfError("Cannot compute hash for identity", err)
+
 	skBytes, err := util.HexS2B(issuer.SecretKey)
 	util.ExitIfError("Cannot convert secret key to bytes", err)
+
 	util.Log("Signing with issuerSK: %s", issuer.SecretKey)
 	signedIdentityHash, err := util.Sign(skBytes, identityHash)
 	util.Log("Signed identity hash: %s, identityHash: %s", signedIdentityHash, util.B2HexS(identityHash))
 	util.ExitIfError("Error signing", err)
-	identityWithNonce := fmt.Sprintf("%s%s", identity.String(), nonce)
 
+	identityWithNonce := fmt.Sprintf("%s%s", identity.String(), nonce)
 	identityWithNonceBytes := []byte(identityWithNonce)
-	identityWithNonceHash := util.SHA256(identityWithNonceBytes)
+	identityWithNonceHash, err := util.CalculateHash(identityWithNonceBytes)
+	util.ExitIfError("Cannot compute hash for identity with nonce", err)
+
 	util.Log("Reading proving key from %s", PROVING_KEY_PATH)
 	provingKey := readProvingKeyFromFile(PROVING_KEY_PATH)
 	//util.ExitIfError("Error reading proving keys", err)

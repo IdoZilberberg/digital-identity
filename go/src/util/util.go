@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/ed25519"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"time"
 )
 
@@ -88,4 +89,27 @@ func ExitIfError(msg string, err error) {
 
 func TodayYYYYMMDD() string {
 	return time.Now().Format("yyyy-MM-dd")
+}
+
+func RunExternal(cmd string, args ...string) ([]byte, error) {
+	Log("Running external command: %s %s", cmd, args)
+	out, err := exec.Command("gamma-cli", "version").Output()
+	if err != nil {
+		Log("Error: %s\n", err)
+		return nil, err
+	}
+	Log("Output: %s\n", out)
+	return out, nil
+}
+
+func CalculateHash(input []byte) ([]byte, error) {
+
+	// Run the "calculate_hash" docker
+
+	_, err := RunExternal("gamma-cli", "version")
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte{9, 9, 9, 9}, nil
 }
