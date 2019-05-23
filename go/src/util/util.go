@@ -93,23 +93,24 @@ func TodayYYYYMMDD() string {
 
 func RunExternal(cmd string, args ...string) ([]byte, error) {
 	Log("Running external command: %s %s", cmd, args)
-	out, err := exec.Command("gamma-cli", "version").Output()
+	out, err := exec.Command(cmd, args...).Output()
 	if err != nil {
-		Log("Error: %s\n", err)
+		Log("Error: %s", err)
 		return nil, err
 	}
-	Log("Output: %s\n", out)
+	Log("Output: %s", out)
 	return out, nil
 }
 
-func CalculateHash(input []byte) ([]byte, error) {
+func CalculateHash(secret string, name string, birthYear string, nonce string) ([]byte, error) {
 
 	// Run the "calculate_hash" docker
 
-	_, err := RunExternal("gamma-cli", "version")
+	args := fmt.Sprintf("%s %s %s %s", secret, name, birthYear, nonce)
+	out, err := RunExternal("./compute_hash.sh", args)
 	if err != nil {
 		return nil, err
 	}
 
-	return []byte{9, 9, 9, 9}, nil
+	return out, nil
 }
