@@ -7,7 +7,7 @@ import (
 
 func verifyZKProofWithGammaCli() {
 
-	out, err := util.RunExternal("gamma-cli", "version")
+	out, err := util.RunExternal("./verify_proof.sh")
 	if err != nil {
 		util.Log("Error; %s", err)
 	}

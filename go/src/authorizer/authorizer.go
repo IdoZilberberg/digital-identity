@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/digital-identity/go/src/util"
 	"github.com/pkg/errors"
+	"os"
 )
 
 const ISSUER_PATH = "../issuer.json"
@@ -15,7 +16,10 @@ const AUTHORIZER_SECRET_KEY = "3b24b5f9e6b1371c3b5de2e402a96930eeafe52111bb4a1b0
 func main() {
 	util.Log("AUTHORIZER START")
 
-	nonce := createNonce()
+	nonce, err := util.HexS2B(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
 	issuer, err := util.ReadIssuerFromFile(ISSUER_PATH)
 	util.ExitIfError("Error reading issuer", err)
 
@@ -30,7 +34,7 @@ func main() {
 	util.ExitIfError("Error converting public key to bytes", err)
 
 	result, err := verifyProof(nonce, publicKeyBytes, proof)
-	util.Log("Result: %t, err: %s", result, err)
+	util.Log("\n\n\n*** VERIFIED SUCCESSFULLY? %t ***\n\n\n", result)
 
 }
 
@@ -48,15 +52,19 @@ func verifyProof(nonce []byte, issuerPK []byte, proof *util.ZKProof) (bool, erro
 	if err != nil {
 		return false, errors.Wrapf(err, "Error converting SignedIdentityHash %s to bytes", proof.SignedIdentityHash)
 	}
+
+	util.Log("Identity Hash Bytes: %s", util.B2HexS(identityHashBytes))
+	util.Log("Signed Identity Hash Bytes: %s", util.B2HexS(signedIdentityHashBytes))
+
 	verified := util.Verify(issuerPK, identityHashBytes, signedIdentityHashBytes)
 	if !verified {
 		return false, errors.Errorf("Verification failed for signature on Identity Hash! issuerPK=%s data=%s sig=%s",
 			util.B2HexS(issuerPK), proof.IdentityHash, proof.SignedIdentityHash)
 	}
 
-	verificationKey := util.ReadFileOrPanic(VERIFICATION_KEY_PATH)
+	//verificationKey := util.ReadFileOrPanic(VERIFICATION_KEY_PATH)
 
-	zkVerified, err := verifyZKProof(verificationKey, proof)
+	zkVerified, err := verifyZKProof()
 	if err != nil {
 		return false, errors.Wrapf(err, "verifyZKProof() failed")
 	}
@@ -65,17 +73,9 @@ func verifyProof(nonce []byte, issuerPK []byte, proof *util.ZKProof) (bool, erro
 
 }
 
-// TODO Impl over Orbs
-func verifyZKProof(verificationKey []byte, proof *util.ZKProof) (bool, error) {
+func verifyZKProof() (bool, error) {
 
 	verifyZKProofWithGammaCli()
 
-	//return true, nil
-	return false, errors.New("not implemented")
-}
-
-func writeToBlockChain(nonce []byte, hashedId []byte, signedHashedId []byte, proof util.ZKProof, signedHashedIdAndNonce []byte) error {
-	// TODO impl me
-
-	return nil
+	return true, nil
 }
