@@ -24,6 +24,6 @@ func TestHashProof(t *testing.T) {
 	var input [2]big.Int
 	input[0].SetString("0x000000000000000000000000000000000000000000000000000000000001bba1",0)
 	input[1].SetString("0x0000000000000000000000000000000000000000000000000000000000000001",0)
-	result := VerifyProof(Altbn128, a, b, c, input)
+	result := VerifyProof(Altbn128, a, b, c, input[:])
 	fmt.Printf("Oded %t", result)
 }

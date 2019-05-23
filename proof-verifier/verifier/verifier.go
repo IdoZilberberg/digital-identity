@@ -83,7 +83,7 @@ func negate(curve CurveSystem, g1point Point) (result Point) {
 	return
 }
 
-func verify(curve CurveSystem, input [2]big.Int, proof proof) (result bool) {
+func verify(curve CurveSystem, input []big.Int, proof proof) (result bool) {
 	vk := verifyingKey(curve);
 	bigintCoordsZero := []*big.Int{big.NewInt(0), big.NewInt(0)}
 	vkX, _ := curve.MakeG1Point(bigintCoordsZero, true)
@@ -110,7 +110,7 @@ func verify(curve CurveSystem, input [2]big.Int, proof proof) (result bool) {
 	return
 }
 
-func VerifyProof(curve CurveSystem, a [2]big.Int, b [2][2]big.Int, c [2]big.Int, input [2]big.Int) (result bool) {
+func VerifyProof(curve CurveSystem, a [2]big.Int, b [2][2]big.Int, c [2]big.Int, input []big.Int) (result bool) {
 	var proof proof;
 
 	coordsA := []*big.Int{&a[0], &a[1]}
