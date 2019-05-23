@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"github.com/digital-identity/go/src/util"
 )
 
 func verifyZKProofWithGammaCli() {
 
-	out, err := util.RunExternal("./verify_proof.sh")
+	_, err := util.RunExternal("./verify_proof.sh")
 	if err != nil {
 		util.Log("Error; %s", err)
 	}
-	fmt.Printf("Output: %s\n", out)
+	//fmt.Printf("Output: %s\n", out)
 }
 
 func verify(publicKey []byte, secretKey []byte, verificationKey []byte, proof *util.ZKProof) {
