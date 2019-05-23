@@ -4,17 +4,18 @@
 package verifier
 
 import (
-	"github.com/orbs-network/bgls/curves" // nolint: golint
 	"math/big"
 	"strings"
+
+	"github.com/orbs-network/bgls/curves" // nolint: golint
 )
 
 // Verifier
 type verifyingKeyStruct struct {
-	a curves.Point
-	b curves.Point
-	gamma curves.Point
-	delta curves.Point
+	a        curves.Point
+	b        curves.Point
+	gamma    curves.Point
+	delta    curves.Point
 	gammaABC []curves.Point
 }
 
@@ -38,7 +39,7 @@ func verifyingKey(curve curves.CurveSystem) (vk verifyingKeyStruct) {
 	gammaABC[5], _ = curve.MakeG1Point(parseBigIntArray("0x2fab815e8617c2f1e1ee10b6c52b35a3f5a458ac6b59dbb75b1673d2bdb64f28,0x2a90ef650fb83364fe3f300396920f7a563a8720cedc6835f48772639016cec3"), true)
 	gammaABC[6], _ = curve.MakeG1Point(parseBigIntArray("0x02e1da9e5843a907b92f1381b5aa23de999995149494cd34a2dd05e9ad1fc2d5,0x1832039e9dafe9a7764c1819e5b75475799f39e69174ed19b5b9a398bd007f3a"), true)
 	gammaABC[7], _ = curve.MakeG1Point(parseBigIntArray("0x13b76a282a3ebc245282eb682a471e7eddc9ca6d45c637369ae4611eaa0a4edd,0x136f3da91d8aa3993378901836a855622a23abab79da213fef5c46b22bd235d0"), true)
-	vk = verifyingKeyStruct{a: alpha, b: beta, gamma : gamma, delta : delta, gammaABC : gammaABC[:]}
+	vk = verifyingKeyStruct{a: alpha, b: beta, gamma: gamma, delta: delta, gammaABC: gammaABC[:]}
 	return
 }
 
@@ -50,11 +51,11 @@ func negate(curve curves.CurveSystem, g1point curves.Point) (result curves.Point
 }
 
 func verify(curve curves.CurveSystem, input []big.Int, proof proof) (result bool) {
-	vk := verifyingKey(curve);
+	vk := verifyingKey(curve)
 	bigintCoordsZero := []*big.Int{big.NewInt(0), big.NewInt(0)}
 	vkX, _ := curve.MakeG1Point(bigintCoordsZero, true)
 	for i := 0; i < len(input); i++ {
-		tmp := vk.gammaABC[i + 1].Mul(&input[i])
+		tmp := vk.gammaABC[i+1].Mul(&input[i])
 		tmp2, _ := vkX.Add(tmp)
 		vkX = tmp2
 	}
@@ -77,11 +78,11 @@ func verify(curve curves.CurveSystem, input []big.Int, proof proof) (result bool
 }
 
 func VerifyProof(curve curves.CurveSystem, a [2]big.Int, b [2][2]big.Int, c [2]big.Int, input []big.Int) (result bool) {
-	var proof proof;
+	var proof proof
 
 	coordsA := []*big.Int{&a[0], &a[1]}
 	proof.a, _ = curve.MakeG1Point(coordsA, true)
-	coordsB := []*big.Int{&b[0][0], &b[0][1],&b[1][0], &b[1][1]}
+	coordsB := []*big.Int{&b[0][0], &b[0][1], &b[1][0], &b[1][1]}
 	proof.b, _ = curve.MakeG2Point(coordsB, true)
 	coordsC := []*big.Int{&c[0], &c[1]}
 	proof.c, _ = curve.MakeG1Point(coordsC, true)
@@ -92,11 +93,15 @@ func VerifyProof(curve curves.CurveSystem, a [2]big.Int, b [2][2]big.Int, c [2]b
 
 func parseBigIntArray(input string) (result []*big.Int) {
 	var inputStrings []string = strings.Split(input, ",")
-	var output []*big.Int = make([]*big.Int, len(inputStrings));
+	var output []*big.Int = make([]*big.Int, len(inputStrings))
 	for i := 0; i < len(inputStrings); i++ {
-		var a big.Int;
+		var a big.Int
 		a.SetString(inputStrings[i], 0)
 		output[i] = &a
 	}
 	return output
+}
+
+func IsOk() bool {
+	return true
 }
