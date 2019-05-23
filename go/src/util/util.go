@@ -92,7 +92,7 @@ func TodayYYYYMMDD() string {
 }
 
 func RunExternal(cmd string, args ...string) ([]byte, error) {
-	Log("Running external command: %s %s", cmd, args)
+	Log("*** Running external command: %s %s", cmd, args)
 	out, err := exec.Command(cmd, args...).Output()
 	if err != nil {
 		Log("Error: %s", err)

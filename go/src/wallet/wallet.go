@@ -28,25 +28,25 @@ func main() {
 	util.ExitIfError("Error reading identity", err)
 	util.Log("Read identity")
 
-	issuer, err := util.ReadIssuerFromFile(ISSUER_PATH)
+	//issuer, err := util.ReadIssuerFromFile(ISSUER_PATH)
 	util.ExitIfError("Error reading issuer", err)
 	util.Log("Read issuer")
 
 	identityHash, err := util.CalculateHash(identity.Secret, identity.Name, identity.DOB, "0")
 	util.ExitIfError("Cannot compute hash for identity", err)
-	util.Log("Identity Hash: %s", identityHash)
-	skBytes, err := util.HexS2B(issuer.SecretKey)
+	//util.Log("Identity Hash: %s", identityHash)
+	//skBytes, err := util.HexS2B(issuer.SecretKey)
 	util.ExitIfError("Cannot convert secret key to bytes", err)
 
-	util.Log("Signing with issuerSK: %s", issuer.SecretKey)
-	signedIdentityHash, err := util.Sign(skBytes, identityHash)
-	util.Log("Signed identity hash: %s\nIdentityHash: %s", util.B2HexS(signedIdentityHash), util.B2HexS(identityHash))
+	//util.Log("Signing with issuerSK: %s", issuer.SecretKey)
+	//signedIdentityHash, err := util.Sign(skBytes, identityHash)
+	//util.Log("Signed identity hash: %s\nIdentityHash: %s", util.B2HexS(signedIdentityHash), util.B2HexS(identityHash))
 	util.ExitIfError("Error signing", err)
 
 	identityWithNonceHash, err := util.CalculateHash(identity.Secret, identity.Name, identity.DOB, nonce)
 	util.ExitIfError("Cannot compute hash for identity with nonce", err)
-	util.Log("Identity+Nonce Hash: %s", identityWithNonceHash)
-	util.Log("Reading proving key from %s", PROVING_KEY_PATH)
+	//util.Log("Identity+Nonce Hash: %s", identityWithNonceHash)
+	//util.Log("Reading proving key from %s", PROVING_KEY_PATH)
 	//provingKey := readProvingKeyFromFile(PROVING_KEY_PATH)
 	//util.ExitIfError("Error reading proving keys", err)
 
@@ -71,7 +71,7 @@ func main() {
 	util.ExitIfError("Failed to create proof", err)
 
 	//util.WriteProofJson(proof, PROOF_PATH)
-	util.Log("Wrote proof to file %s, continue with Authorizer flow", proofOutFile)
+	util.Log("*** Wrote proof to file %s, continue with Authorizer flow", proofOutFile)
 
 }
 
@@ -112,10 +112,11 @@ func CreateProof(
 	timestamp string, // string
 ) ([]byte, error) {
 
-	util.Log("Millis: %s", timestamp)
 	args := fmt.Sprintf("%s %s %s %s %s %s %s %s %s",
 		clientSecret, name, birthYear, hashedID0, hashedID1, nonce, identityWithNonceHash0, identityWithNonceHash1, timestamp)
+	util.Log("*** GENERATING PROOF ***")
 	util.Log("Args: %s", args)
+
 	out, err := util.RunExternal("./generate_proof.sh", args)
 	if err != nil {
 		return nil, err
