@@ -30,11 +30,17 @@ Login to a running container:
 
 
 
-docker exec -d zok_compute_hash /bin/bash -c "./zokrates compute-witness -a secret name birth_year 0 > code/witness_1.log"
-cat code_compute_hash/witness_1.log| tail -2 | sort | awk '{print $2}'
-Extract 0 from line 0 and 1 from line 1
+docker exec -d zok_compute_hash /bin/bash -c "./zokrates compute-witness -a 12345678901234567890 3565 1980 0 > code/witness_hashed_id.log
+echo $(cat code_compute_hash/witness_hashed_id.log | tail -2 | sort | head -1 | cut -d" " -f2),$(cat code_compute_hash/witness_hashed_id.log | tail -2 | sort | tail -1| cut -d" " -f2)
+Extract hashedID0 from line 0 and hashedID1 from line 1
 
-docker exec -d zok_compute_hash /bin/bash -c "./zokrates compute-witness -a secret name birth_year nonce > code/witness_2.log"
-cat code_compute_hash/witness_2.log| tail -2 | sort | awk '{print $2}'
+docker exec -d zok_compute_hash /bin/bash -c "./zokrates compute-witness -a secret name birth_year nonce > code/witness_response.log"
+cat code/witness_response.log | tail -2 | sort | awk '{print $2}'
+Extract response0 from line 0 and response1 from line 1
 
-* zok_gen_proof
+### zok_gen_proof
+* cp code/out* .
+* cp code/proving.key .
+* docker exec -d zok_gen_proof /bin/bash -c "./zokrates compute-witness -a secret name birthYear currentYear hashedID0 hashedID1 nonce response0 response1"
+* sleep 1
+* docker exec -d zok_gen_proof /bin/bash -c "./zokrates generate-proof" 
