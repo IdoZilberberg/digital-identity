@@ -4,6 +4,7 @@
 package main
 
 import (
+	"fmt"
 	"math/big"
 	"strings"
 
@@ -128,26 +129,54 @@ func Is_ok() bool {
 //}
 
 func VerifyProof(aStr string, bStr string, cStr string, inputStr string) uint32 {
+	return VerifyProof2(curves.Altbn128, aStr, bStr, cStr, inputStr)
+}
+
+
+func VerifyProof2(curve curves.CurveSystem, aStr string, bStr string, cStr string, inputStr string) uint32 {
+	fmt.Printf("\n\n\n\n\n\n\n Hellos \n\n\n\n\n\n")
 	var proof proof
-	//aStr= "0x075803fed276c64417f0a7ae76c1b2c5bc6d8efd7466c4e791ed8a5b442b2d9e,0x0e73a4c3932fc0a54c9f6e38c87067ecd40a27aec681a91e1f0a10ecb52f5516"
-	//bStr = "0x1dd811ab5d50b91946cd1db42bc2a393484ecfbc8cd5920065ea94fde6d5ba55,0x1ae9b76c87c3b9cafbb4e1d39b4804b860a0ca1dafacdf208424bbe326c8cd2c,0x154086af81180da566c76d80a5a4b71d50f6f81c0c74bbb5565ba0def8e1b1ce,0x28da38e7ab834c8a6fc2176a393868bf5fbfabb0152c0444ee28873fe1773571"
-	//cStr = "0x13b1cba32cd29f3568aa35212a22943085f0e40fa80f2719c3506e5a8a14310a,0x2d16fead425a374b3d6ded96491e8291a965d7f2afaf10f6ce3f0cfb3873c447"
-	//inputStr = "0x000000000000000000000000000000000000000000000000000000000001bba1,0x0000000000000000000000000000000000000000000000000000000000000001"
+	////aStr= "0x075803fed276c64417f0a7ae76c1b2c5bc6d8efd7466c4e791ed8a5b442b2d9e,0x0e73a4c3932fc0a54c9f6e38c87067ecd40a27aec681a91e1f0a10ecb52f5516"
+	////bStr = "0x1dd811ab5d50b91946cd1db42bc2a393484ecfbc8cd5920065ea94fde6d5ba55,0x1ae9b76c87c3b9cafbb4e1d39b4804b860a0ca1dafacdf208424bbe326c8cd2c,0x154086af81180da566c76d80a5a4b71d50f6f81c0c74bbb5565ba0def8e1b1ce,0x28da38e7ab834c8a6fc2176a393868bf5fbfabb0152c0444ee28873fe1773571"
+	////cStr = "0x13b1cba32cd29f3568aa35212a22943085f0e40fa80f2719c3506e5a8a14310a,0x2d16fead425a374b3d6ded96491e8291a965d7f2afaf10f6ce3f0cfb3873c447"
+	////inputStr = "0x000000000000000000000000000000000000000000000000000000000001bba1,0x0000000000000000000000000000000000000000000000000000000000000001"
+	//
+	//var a []*big.Int
+	//a = parseBigIntArray(aStr)
+	//fmt.Printf("\n\n\n\n\n\n\n %s \n\n\n\n\n\n", a)
+	//proof.a, _ = curves.Altbn128.MakeG1Point(a, true)
+	//
+	//fmt.Printf("\n\n\n\n\n\n\n %s \n\n\n\n\n\n",proof.a)
+	//
+	//var b []*big.Int = parseBigIntArray(bStr)
+	//proof.b, _ = curves.Altbn128.MakeG2Point(b, true)
+	//
+	//var c []*big.Int = parseBigIntArray(cStr)
+	//proof.c, _ = curves.Altbn128.MakeG1Point(c, true)
+	//var input []*big.Int = parseBigIntArray(inputStr)
 
-	var a []*big.Int = parseBigIntArray(aStr)
-	proof.a, _ = curves.Altbn128.MakeG1Point(a, true)
+	proof.a, _ = curve.MakeG1Point(parseBigIntArray(aStr), true)
+	proof.b, _ = curve.MakeG2Point(parseBigIntArray(bStr), true)
+	proof.c, _ = curve.MakeG1Point(parseBigIntArray(cStr), true)
+	fmt.Printf("\n\n\n\n\n\n\n ODED1234567678909  %v \n\n\n\n\n\n",proof)
 
-	var b []*big.Int = parseBigIntArray(bStr)
-	proof.b, _ = curves.Altbn128.MakeG2Point(b, true)
-
-	var c []*big.Int = parseBigIntArray(cStr)
-	proof.c, _ = curves.Altbn128.MakeG1Point(c, true)
-	var input []*big.Int = parseBigIntArray(inputStr)
-
-	result := verify(curves.Altbn128, input, proof)
+	var input []*big.Int
+	input = parseBigIntArray(inputStr)
+	fmt.Printf("\n\n\n\n\n\n\n ODED999999999  %v \n\n\n\n\n\n",input)
+	result := verify(curve, input, proof)
 	if result {
-		return 0x10ded
+		return 1
 	} else {
-		return 0x1d0
+		return 0
 	}
+}
+
+func main() {
+	b:= verifyingKey(curves.Altbn128)
+	fmt.Printf("%s",b)
+	a:= VerifyProof("0x09f50c87eebe68b181ea9772a125ac85efd91fb6e90209c1db8477873808d5d9,0x1379940536b0a9739866ecfb81f58db136199752dd35efcaee26adbc76218f7c",
+		"0x2f0c9a8098d33413550fef8561bb063300fc5ef5487de69d31d26854e789aaab,0x0cc94227faedb1ec9624eac3f692fd1162e27d77a82e512a8e313cc9307294c7,0x245720ccab66f9c32aceefd7b8be03b956aedf8a04c69453da8b36eec46a7a96,0x2cabed2c5711b16117f94b9db65a1a42d669a5c895d551fca43f84a8a22f1271",
+		"0x0daf9ac1b3d969873078d7b7de0f61f497b5bd6a4be0a25192b0127888f74b47,0x1d1ef5e4db1992e9a1abf73c8cd7260c16617f22fbd143b0788622073a9c348e",
+		"0x00000000000000000000000000000000000000000000000000000000000007e3,0x0000000000000000000000000000000072d67d19ceb15c63291cce17f12d3f3e,0x0000000000000000000000000000000062258940f07390a79bcdbc7e2f4c3124,0x0000000000000000000000000000000000000000000000000000000000016062,0x00000000000000000000000000000000b6964b2572dd8ca056313bd0d92cf572,0x000000000000000000000000000000006ffd538fd64a3e68c1fe2a8d4b389232,0x0000000000000000000000000000000000000000000000000000000000000001")
+	fmt.Printf("%s",a)
 }
