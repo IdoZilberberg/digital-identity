@@ -50,7 +50,6 @@ func verifyingKey(curve curves.CurveSystem) (vk verifyingKeyStruct) {
 	vk = verifyingKeyStruct{a: alpha, b: beta, gamma: gamma, delta: delta, gammaABC: gammaABC[:]}
 	return
 }
-
 func negate(curve curves.CurveSystem, g1point curves.Point) (result curves.Point) {
 	coords := g1point.ToAffineCoords()
 	coords[1].Sub(curve.GetG1Q(), coords[1])
@@ -132,7 +131,6 @@ func VerifyProof(aStr string, bStr string, cStr string, inputStr string) uint32 
 	return VerifyProof2(curves.Altbn128, aStr, bStr, cStr, inputStr)
 }
 
-
 func VerifyProof2(curve curves.CurveSystem, aStr string, bStr string, cStr string, inputStr string) uint32 {
 	fmt.Printf("\n\n\n\n\n\n\n Hellos \n\n\n\n\n\n")
 	var proof proof
@@ -158,11 +156,11 @@ func VerifyProof2(curve curves.CurveSystem, aStr string, bStr string, cStr strin
 	proof.a, _ = curve.MakeG1Point(parseBigIntArray(aStr), true)
 	proof.b, _ = curve.MakeG2Point(parseBigIntArray(bStr), true)
 	proof.c, _ = curve.MakeG1Point(parseBigIntArray(cStr), true)
-	fmt.Printf("\n\n\n\n\n\n\n ODED1234567678909  %v \n\n\n\n\n\n",proof)
+	fmt.Printf("\n\n\n\n\n\n\n ODED1234567678909  %v \n\n\n\n\n\n", proof)
 
 	var input []*big.Int
 	input = parseBigIntArray(inputStr)
-	fmt.Printf("\n\n\n\n\n\n\n ODED999999999  %v \n\n\n\n\n\n",input)
+	fmt.Printf("\n\n\n\n\n\n\n ODED999999999  %v \n\n\n\n\n\n", input)
 	result := verify(curve, input, proof)
 	if result {
 		return 1
@@ -172,11 +170,11 @@ func VerifyProof2(curve curves.CurveSystem, aStr string, bStr string, cStr strin
 }
 
 func main() {
-	b:= verifyingKey(curves.Altbn128)
-	fmt.Printf("%s",b)
-	a:= VerifyProof("0x09f50c87eebe68b181ea9772a125ac85efd91fb6e90209c1db8477873808d5d9,0x1379940536b0a9739866ecfb81f58db136199752dd35efcaee26adbc76218f7c",
+	b := verifyingKey(curves.Altbn128)
+	fmt.Printf("%s", b)
+	a := VerifyProof("0x09f50c87eebe68b181ea9772a125ac85efd91fb6e90209c1db8477873808d5d9,0x1379940536b0a9739866ecfb81f58db136199752dd35efcaee26adbc76218f7c",
 		"0x2f0c9a8098d33413550fef8561bb063300fc5ef5487de69d31d26854e789aaab,0x0cc94227faedb1ec9624eac3f692fd1162e27d77a82e512a8e313cc9307294c7,0x245720ccab66f9c32aceefd7b8be03b956aedf8a04c69453da8b36eec46a7a96,0x2cabed2c5711b16117f94b9db65a1a42d669a5c895d551fca43f84a8a22f1271",
 		"0x0daf9ac1b3d969873078d7b7de0f61f497b5bd6a4be0a25192b0127888f74b47,0x1d1ef5e4db1992e9a1abf73c8cd7260c16617f22fbd143b0788622073a9c348e",
 		"0x00000000000000000000000000000000000000000000000000000000000007e3,0x0000000000000000000000000000000072d67d19ceb15c63291cce17f12d3f3e,0x0000000000000000000000000000000062258940f07390a79bcdbc7e2f4c3124,0x0000000000000000000000000000000000000000000000000000000000016062,0x00000000000000000000000000000000b6964b2572dd8ca056313bd0d92cf572,0x000000000000000000000000000000006ffd538fd64a3e68c1fe2a8d4b389232,0x0000000000000000000000000000000000000000000000000000000000000001")
-	fmt.Printf("%s",a)
+	fmt.Printf("%s", a)
 }
